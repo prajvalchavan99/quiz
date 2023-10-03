@@ -1,0 +1,20 @@
+{% include 'editquiznavigation.html' %}
+{% load static %}
+<div class="quiz-maincontainer">
+    {% include 'settings/settingsidebar.html' %}
+    <div class="quiz-mainplayground">
+        <div class="quiz-settings-container">
+            <h2 class="quiz-settings-title">Security Quiz Settings</h2>
+            <div id="question-settings" class="quiz-group">
+                <h3 class="quiz-group-title">Authentication</h3>
+                <div class="quiz-settings-item">
+                    <label for="randomizeQuestions">Allow only logged in users:</label>
+                    <input type="checkbox" id="randomizeQuestions" name="randomization">
+                </div>
+            </div>
+            <div class="quiz-action-button-container">
+                <button class="quiz-action-button">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

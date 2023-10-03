@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Quiz</title>
+    <link rel="stylesheet" href="{% static 'takequiz.css' %}">
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1>Quiz Title</h1>
+            <p class="quiz-details">Time Left: 30 minutes</p>
+            <p class="quiz-details">Questions: 5</p>
+        </div>
+        
+        <form id="quiz-form" action="{% url 'submit_quiz' quiz.id %}" method="post">
+            {% csrf_token %}
+            {% for question in allQuestions %}
+            <div class="question">
+                <p>{{ forloop.counter }}. {{ question.title }}</p>
+                {% if question.question_type == 'single_choice' %}
+                    {% for answer in question.answer_set.all %}
+                        <div class="answer">
+                            <input type="radio" name="question_{{ question.id }}" value="{{ answer.content }}" id="question_{{ question.id }}_{{ answer.id }}">
+                            <label for="question_{{ question.id }}_{{ answer.id }}" class="answer-label">{{ answer.content }}</label>
+                        </div>
+                    {% endfor %}
+                {% elif question.question_type == 'multiple_choice' %}
+                    {% for answer in question.answer_set.all %}
+                        <div class="answer">
+                            <input type="checkbox" name="question_{{ question.id }}" value="{{ answer.content }}" id="question_{{ question.id }}_{{ answer.id }}">
+                            <label for="question_{{ question.id }}_{{ answer.id }}" class="answer-label">{{ answer.content }}</label>
+                        </div>
+                    {% endfor %}
+                {% elif question.question_type == 'short_answer' %}
+                    <div class="answer">
+                        <input type="text" name="question_{{ question.id }}" class="short-answer" placeholder="{{question.placeholder}}">
+                    </div>
+                {% elif question.question_type == 'long_answer' %}
+                    <div class="answer">
+                        <textarea name="question_{{ question.id }}" class="long-answer" rows="5" placeholder="{{question.placeholder}}"></textarea>
+                    </div>
+                {% elif question.question_type == 'yes_no' %}
+                    <div class="answer">
+                        <input type="radio" name="question_{{ question.id }}" value="Yes" id="question_{{ question.id }}_yes">
+                        <label for="question_{{ question.id }}_yes" class="answer-label">Yes</label>
+                    </div>
+                    <div class="answer">
+                        <input type="radio" name="question_{{ question.id }}" value="No" id="question_{{ question.id }}_no">
+                        <label for="question_{{ question.id }}_no" class="answer-label">No</label>
+                    </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="submit-button">Submit</button>
+        </form>
+    </div>
+
+    <!-- <script>
+        window.addEventListener('scroll', function() {
+            var header = document.querySelector('.quiz-header');
+            if (window.scrollY > 50) {
+                header.classList.add('fixed-header');
+            } else {
+                header.classList.remove('fixed-header');
+            }
+        });
+    </script> -->
+</body>
+</html>

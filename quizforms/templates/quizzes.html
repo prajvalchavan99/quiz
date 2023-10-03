@@ -1,0 +1,40 @@
+{% include 'navigation.html' %}
+{% load static %}
+<div style="text-align: right;margin-top: 10px;">
+    <a href="{% url 'createquiz' %}">
+        <button class="quiz-create-new-button">Create New Quiz</button>
+    </a>
+</div>
+<div class="quiz-maincontainer">
+    <table class="quiz-quiz-table">
+        <thead>
+            <tr>
+                <th>Quiz ID</th>
+                <th>Quiz Title</th>
+                <th>Publish Status</th>
+                <th>Date Modified</th>
+                <th>Reports</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for quiz in quizlist %}
+            <tr>
+                <td>{{quiz.id}}</td>
+                <td><a href="edit-quiz/{{quiz.id}}">{{quiz.quiztitle}}</a></td>
+                <td>{% if quiz.ispublished %}Published{% else %}Draft{% endif %}</td>
+                <td>{{quiz.datemodified}}</td>
+                <td>10</td>
+                <td><button onclick="location.href='edit-quiz/{{quiz.id}}'" class="quiz-action-button">Edit</button></td>
+                <td>
+                    <form method="post" action="{% url 'deletequiz' quiz.id %}">
+                        {% csrf_token %}
+                        <button class="quiz-action-button">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

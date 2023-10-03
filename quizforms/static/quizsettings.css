@@ -1,0 +1,123 @@
+.quiz-settings-container {
+  margin: 20px;
+}
+
+.quiz-sidebar {
+  display: flex;
+  flex-direction: column;
+}
+
+.quiz-sidebar-item {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.quiz-sidebar-item:hover {
+  background-color: #e6e6e6;
+}
+
+.quiz-sidebar-item.active {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.quiz-sidebar-item a{
+  text-decoration: none;
+  color: black;
+}
+
+.quiz-settings-title {
+  font-size: 24PX;
+  margin-bottom: 20PX;
+}
+
+.quiz-group {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+}
+
+.quiz-group-title {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #333;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.quiz-settings-item {
+  margin-bottom: 15px;
+}
+.quiz-settings-item {
+  margin-bottom: 15px;
+}
+
+
+.quiz-settings-item input,
+.quiz-settings-item textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+  outline: none;
+}
+
+.quiz-settings-item input[type="checkbox"] {
+  margin-right: 5px;
+  height: 15px;
+  width: 15px;
+}
+
+.quiz-settings-item label{
+  font-weight: normal;
+}
+
+.quiz-settings-item input[type="checkbox"]:checked + label {
+  font-weight: bold;
+}
+
+.quiz-settings-item input:focus,
+.quiz-settings-item textarea:focus {
+  border-color: #007bff;
+}
+
+.quiz-settings-field {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.quiz-settings-field input[type="checkbox"] {
+  margin-right: 5px;
+  height: 20px;
+  width: 20px;
+}
+
+.quiz-settings-field label {
+  font-weight: normal;
+}
+
+.quiz-settings-field input[type="checkbox"]:checked + label {
+  font-weight: bold;
+}
+
+.quiz-settings-field input[type="radio"] {
+  margin-right: 5px;
+  height: 20px;
+  width: 20px;
+}
+
+.quiz-settings-field input[type="radio"]:checked + label {
+  font-weight: bold;
+}
+
+.quiz-action-button-container {
+  text-align: center;
+  margin-top: 20px;
+}

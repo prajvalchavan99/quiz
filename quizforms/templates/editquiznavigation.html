@@ -1,0 +1,33 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'quizmain.css' %}">
+<link rel="stylesheet" href="{% static 'quizsettings.css' %}">
+<link rel="stylesheet" href="{% static 'quizreports.css' %}">
+<script src="{% static 'quizscript.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<div class="quiz-navbar">
+    <a class="quiz-navbarbranding" href="{% url 'quizlist' %}">Quizzes</a>
+    <div class="quiz-navbartitle">
+        <div class="quiz-navbartabs"><a href="{% url 'editquiz' quiz.id %}">Edit quiz</a></div>
+        <div class="quiz-navbartabs"><a href="{% url 'quizgeneralsettings' quiz.id %}">Quiz settings</a></div>
+        <div class="quiz-navbartabs"><a href="{% url 'quizreports' quiz.id %}">Quiz reports</a></div>
+    </div>
+    {% with 'takequiz' as takequiz %}
+    <div class="quiz-navbarhomelink"><button class="take-quiz" onclick="window.open('{% url takequiz quiz.quiztitle|slugify %}')">Take quiz</button><a href="/" style="font-size: 22px;color: white;">{{ projectName }} >></a></div>
+    {% endwith %}
+</div>
+
+<div id="message-container" class="message-container">
+    <div id="success-message" class="message success-message"></div>
+    <div id="error-message" class="message error-message"></div>
+</div>
+
+{% if messages %}
+{% for message in messages %}
+<script>
+    showMessage('{{message}}','{{message.tags}}');
+</script>
+{% endfor %}
+{% endif %}
