@@ -1,0 +1,40 @@
+{% include 'navigation.html' %}
+{% load static %}
+<div style="text-align: right;margin-top: 10px;">
+    <a href="{% url 'createform' %}">
+        <button class="form-create-new-button">Create New Form</button>
+    </a>
+</div>
+<div class="form-maincontainer">
+    <table class="form-form-table">
+        <thead>
+            <tr>
+                <th>Form ID</th>
+                <th>Form Title</th>
+                <th>Publish Status</th>
+                <th>Date Modified</th>
+                <th>Reports</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for form in formlist %}
+            <tr>
+                <td>{{form.id}}</td>
+                <td><a href="edit-form/{{form.id}}">{{form.formtitle}}</a></td>
+                <td>{% if form.ispublished %}Published{% else %}Draft{% endif %}</td>
+                <td>{{form.datemodified}}</td>
+                <td>10</td>
+                <td><button onclick="location.href='edit-form/{{form.id}}'" class="form-action-button">Edit</button></td>
+                <td>
+                    <form method="post" action="{% url 'deleteform' form.id %}">
+                        {% csrf_token %}
+                        <button class="form-action-button">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

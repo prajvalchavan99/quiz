@@ -1,0 +1,4 @@
+conditionalforms/migrations/
+quiz/__pycache__/
+conditionalforms/__pycache__/
+db.sqlite3

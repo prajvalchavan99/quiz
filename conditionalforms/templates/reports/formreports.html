@@ -1,0 +1,70 @@
+{% include 'editformnavigation.html' %}
+{% load static %}
+<div class="form-maincontainer">
+    <div class="form-sidebar-questioncontainer">
+        <div class="form-sidebar">
+            <div class="form-sidebar-item active" data-section="form-takers"
+                onclick="showReportsSection('form-takers')">Form Reports</div>
+            <!-- <div class="form-sidebar-item" data-section="form-results" onclick="showReportsSection('form-results')">Form
+                Results</div>
+            <div class="form-sidebar-item" data-section="form-summary" onclick="showReportsSection('form-summary')">Form
+                Summary</div>
+            <div class="form-sidebar-item" data-section="form-analytics" onclick="showReportsSection('form-analytics')">
+                Form Analytics</div>
+            <div class="form-sidebar-item" data-section="form-export" onclick="showReportsSection('form-export')">Form
+                Export</div> -->
+        </div>
+    </div>
+    <div class="form-mainplayground">
+        <div class="form-page-title">Form Reports</div>
+        <div class="dashboard-container">
+            <div class="dashboard-card">
+                <h3>Total Questions</h3>
+                <p class="dashboard-value">15</p>
+            </div>
+            <div class="dashboard-card">
+                <h3>Total Form Takers</h3>
+                <p class="dashboard-value">126</p>
+            </div>
+            <div class="dashboard-card">
+                <h3>Average Score</h3>
+                <p class="dashboard-value">78%</p>
+            </div>
+        </div>
+        <h2>Form Reports for {{ form.formtitle }}</h2>
+        <div class="form-report-table">
+            <table class="form-reports-table" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th>Form Taker</th>
+                        <th>Score</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="formReportsTableBody">
+                    {% for submission in submissions %}
+                    <tr>
+                        <td>Form Attempt {{ forloop.counter }}</td>
+                        <td>Submitted on: {{ submission.timestamp }}</td>
+                        <td>
+                            <ul>
+                                {{submission.useranswer_set.all}}
+                            </ul>
+                        </td>
+                        <td>
+                            {% with 'formdetailedreports' as detailedReport %}
+                            <i class="fa-regular fa-eye" onclick="location.href='{% url detailedReport submission.id form.id %}'"></i>
+                            <i class="fa-solid fa-trash"></i>
+                            {% endwith %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% block content %}
+        <a href="{% url 'formlist' %}">Back to Form List</a>
+        {% endblock %}
+    </div>
+</div>

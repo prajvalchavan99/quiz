@@ -1,0 +1,32 @@
+{% include 'editformnavigation.html' %}
+{% load static %}
+<div class="form-maincontainer">
+    {% include 'settings/settingsidebar.html' %}
+    <div class="form-mainplayground">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-settings-container">
+                    <h2 class="form-settings-title">Security Form Settings</h2>
+                    <div id="question-settings" class="form-group">
+                    <h3 class="form-group-title">Authentication</h3>
+                    <div class="form-settings-item">
+                        <label for="randomizeQuestions">Allow only logged in users:</label>
+                        {{securitySetting.allow_logged_in_user}}
+                    </div>
+                    <h3 class="form-group-title">Attempts and Feedback</h3>
+                    <div class="form-settings-item">
+                        <label for="">Allow Multiple Attempts:</label>
+                        {{securitySetting.allow_multiple_attempts}}
+                    </div>
+                    <div class="form-settings-item">
+                        <label for="">Display user response at the end:</label>
+                        {{securitySetting.display_response}}
+                    </div>
+                </div>
+                <div class="form-action-button-container">
+                    <button class="form-action-button">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

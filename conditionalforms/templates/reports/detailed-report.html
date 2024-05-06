@@ -1,0 +1,97 @@
+{% if request.user.is_superuser %}
+    {% include 'editformnavigation.html' %}
+{% endif %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'formfill.css' %}">
+<div class="form-container">
+    {% if not security_settings.allow_logged_in_user or security_settings.allow_logged_in_user and request.user.is_authenticated %}
+    <div class="form-header">
+        {% if form.showformdetails %}
+            <h1>{{form.formtitle}}</h1>
+            <h4>{{form.formdescription}}</h4>
+        {% endif %}
+        <p class="form-details">Number of Questions: {{allQuestions|length}}</p>
+    </div>
+        {% if user_info_settings.info_collection_placement == 'at_start' %}
+            {% if user_info_settings.collect_name or user_info_settings.collect_email %}
+            <div class="form-user-info">
+                <table>
+                    {% if user_info_settings.collect_name %}
+                    <tr>
+                        <td><label for="Name">Name</label></td>
+                        <td></td>
+                    </tr>
+                    {% endif %}
+                    {% if user_info_settings.collect_email %}
+                    <tr>
+                        <td><label for="Email">Email</label></td>
+                        <td></td>
+                    </tr>
+                    {% endif %}
+                </table>
+            </div>
+            {% endif %}
+        {% endif %}
+        {% for answer in user_answers %}
+        <div class="question">
+            <p>{{ forloop.counter }}. {{ answer.question_text }}</p>
+            {{answer.selected_answer}}
+            {% if question.question_type == 'single_choice' %}
+                {% for answer in question.answer_set.all %}
+                    <div class="answer">
+                        <input type="radio" name="question_{{ question.id }}" value="{{ answer.content }}" id="question_{{ question.id }}_{{ answer.id }}">
+                        <label for="question_{{ question.id }}_{{ answer.id }}" class="answer-label">{{ answer.content }}</label>
+                    </div>
+                {% endfor %}
+            {% elif question.question_type == 'multiple_choice' %}
+                {% for answer in question.answer_set.all %}
+                    <div class="answer">
+                        <input type="checkbox" name="question_{{ question.id }}" value="{{ answer.content }}" id="question_{{ question.id }}_{{ answer.id }}">
+                        <label for="question_{{ question.id }}_{{ answer.id }}" class="answer-label">{{ answer.content }}</label>
+                    </div>
+                {% endfor %}
+            {% elif question.question_type == 'short_answer' %}
+                <div class="answer">
+                    <input type="text" name="question_{{ question.id }}" class="short-answer" placeholder="{{question.placeholder}}">
+                </div>
+            {% elif question.question_type == 'long_answer' %}
+                <div class="answer">
+                    <textarea name="question_{{ question.id }}" class="long-answer" rows="5" placeholder="{{question.placeholder}}"></textarea>
+                </div>
+            {% elif question.question_type == 'yes_no' %}
+                <div class="answer">
+                    <input type="radio" name="question_{{ question.id }}" value="Yes" id="question_{{ question.id }}_yes">
+                    <label for="question_{{ question.id }}_yes" class="answer-label">Yes</label>
+                </div>
+                <div class="answer">
+                    <input type="radio" name="question_{{ question.id }}" value="No" id="question_{{ question.id }}_no">
+                    <label for="question_{{ question.id }}_no" class="answer-label">No</label>
+                </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        {% if user_info_settings.info_collection_placement == 'at_end' %}
+            {% if user_info_settings.collect_name or user_info_settings.collect_email %}
+            <div class="form-user-info">
+                <table>
+                    {% if user_info_settings.collect_name %}
+                    <tr>
+                        <td><label for="Name">Name</label></td>
+                        <td><input type="text" name="Name" id="Name" placeholder="Enter your name" {% if request.user.is_authenticated %}value="{{request.user.first_name}}" disabled {% endif %}></td>
+                    </tr>
+                    {% endif %}
+                    {% if user_info_settings.collect_email %}
+                    <tr>
+                        <td><label for="Email">Email</label></td>
+                        <td><input type="email" name="Email" id="Email" placeholder="Enter your email" {% if request.user.is_authenticated %}value="{{request.user.email}}" disabled {% endif %}></td>
+                    </tr>
+                    {% endif %}
+                </table>
+            </div>
+            {% endif %}
+        {% endif %}
+    {% else %}
+        <h2>Please log in to access the form.</h2>
+        <p>You need to be authenticated to fill out this form.</p>
+    {% endif %}
+</div>

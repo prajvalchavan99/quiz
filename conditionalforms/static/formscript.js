@@ -11,15 +11,15 @@ function toggleAddQuestion() {
     addQuestionIcon.classList.add("fa-minus");
   }
 }
-function confirmDeleteQuiz(id) {
-  var confirmDelete = confirm("Are you sure you want to delete quiz " + id + "?")
+function confirmDeleteForm(id) {
+  var confirmDelete = confirm("Are you sure you want to delete form " + id + "?")
   if (confirmDelete) {
     console.log("deleted");
   }
 }
 
 function showSettings(section) {
-  var settingsGroups=document.getElementsByClassName('quiz-group');
+  var settingsGroups=document.getElementsByClassName('form-group');
   for (let i = 0; i < settingsGroups.length; i++) {
     settingsGroups[i].style.display="none";
   }
@@ -27,12 +27,12 @@ function showSettings(section) {
   var selectedSettingGroup = document.getElementById(section + '-settings');
   selectedSettingGroup.style.display="block";
 
-  var sidebarItems = document.getElementsByClassName('quiz-sidebar-item');
+  var sidebarItems = document.getElementsByClassName('form-sidebar-item');
   for (let i = 0; i < sidebarItems.length; i++) {
     sidebarItems[i].classList.remove("active");
   }
 
-  var selectedSidebarItem = document.querySelector('quiz-sidebar-item[data-section="'+ section +'"]');
+  var selectedSidebarItem = document.querySelector('form-sidebar-item[data-section="'+ section +'"]');
   selectedSidebarItem.classList.add('active')
 }
 
@@ -58,7 +58,7 @@ function updateContent(id,element){
   document.getElementById("textarea-"+id).value=element.innerHTML;
 }
 
-function slugifyQuizTitle(value){
+function slugifyFormTitle(value){
   var slugifyString = value.toString().toLowerCase()
     .replace(/\s+/g, '-')
     .replace(/&/g, '-and-')
@@ -67,5 +67,19 @@ function slugifyQuizTitle(value){
     .replace(/^-+/, '')
     .replace(/-+$/, '')
 
-  document.getElementById("id_quizslug").value=slugifyString;
+  document.getElementById("id_formslug").value=slugifyString;
+}
+
+function slugifyFormTitle(){
+  console.log("calling");
+  var element = document.getElementById("id_formtitle")
+  var slugifyString = element.value.toString().toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/&/g, '-and-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-')
+    .replace(/^-+/, '')
+    .replace(/-+$/, '')
+
+  document.getElementById("id_formslug").value=slugifyString;
 }

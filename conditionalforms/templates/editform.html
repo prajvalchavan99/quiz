@@ -1,0 +1,155 @@
+{% include 'editformnavigation.html' %}
+{% load static %}
+<div class="form-maincontainer">
+    <div class="form-sidebar-questioncontainer">
+        <h3 class="form-sidebar-title">
+            <button id="toggleAddQuestion" class="form-collapsible-btn" onclick="toggleAddQuestion()">
+                <i class="fas fa-plus" id="addQuestionIcon"></i> Add questions
+            </button>
+        </h3>
+        <div class="form-question-buttons" id="addQuestionSection">
+            <form action="{% url 'addquestion' id %}" method="post">
+                {% csrf_token %}
+                <button class="form-question-button" name="addquestion" value="single_choice">Single Choice</button>
+                <button class="form-question-button" name="addquestion" value="multiple_choice">Multiple Choice</button>
+                <button class="form-question-button" name="addquestion" value="short_answer">Short Answer</button>
+                <button class="form-question-button" name="addquestion" value="long_answer">Long Answer</button>
+                <button class="form-question-button" name="addquestion" value="yes_no">Yes/No</button>
+            </form>
+        </div>
+        <h3 class="form-sidebar-title">Form questions</h3>
+        <div class="form-question-list" id="sortableQuestionsList" style="height: 75%;">
+            {% for question in allQuestions %}
+            <div class="form-question {% if question.id|add:'0' == question_forms.0.instance.pk|add:'0' %}active{% endif %}" data-questionid="{{question.id}}">
+                <img src="{% static 'images/drag-drop.png' %}" alt="" class="form-question-drag-drop" width="15px"><a href="{% url 'editquestion' id question.id %}" class="form-question-text"><div>Q{{forloop.counter}} {{question.title|safe}}</div></a>
+                <form method="post" action="{% url 'deletequestion' question.id %}">
+                    {% csrf_token %}
+                    <div class="form-question-actions">
+                        <button class="form-question-delete"><i class="fas fa-trash"></i></button>
+                    </div>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="form-mainplayground">
+        <div class="form-details-panel">
+            {% with 'formgeneralsettings' as settingsurl %}
+            <h3>{{form.formtitle}} <i onclick="location.href='{% url settingsurl form.id %}'" class="fas fa-pencil" {% if not question_forms %} style="display: inline-block;opacity: 1;" {% endif %}></i></h3>
+            <p>{{form.formdescription}} <i onclick="location.href='{% url settingsurl form.id %}'" class="fas fa-pencil" {% if not question_forms %} style="display: inline-block;opacity: 1;" {% endif %}></i></p>
+            {% endwith %}
+        </div>
+        {% if question_forms %}
+        <form method="post">
+        {% csrf_token %}
+        <div class="form-question-container">
+            <textarea name="{{ question_forms.0.title.html_name }}" id="textarea-{{question_forms.0.title.html_name}}">{{question_forms.0.title.value}}</textarea>
+            <div class="form-question-title" contenteditable="true" id="{{question_forms.0.title.html_name}}" onblur="updateContent(this.id,this)">{{question_forms.0.title.value|safe}}</div>{{ question_forms.0.question_type }}
+            {% if questions.question_type == 'single_choice' %}
+            <div class="form-answer-list">
+                {{ answerforms.management_form }}
+                {% for hidden in answerforms.form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+                {% for field in answerforms %}
+                {{field.id}}
+                <div class="form-answer-card">
+                    <input type="checkbox" name="{{ field.is_correct.html_name }}" id="{{ field.content.id_for_label }}" {% if field.is_correct.value %}checked{% endif %} onchange="SingleChoiceQuestionSelection(this.id)">
+                    <label for="{{ field.content.id_for_label }}" class="form-answer-content">
+                        <span class="icon"><i class="fas fa-circle"></i></span>
+                        <textarea name="{{field.content.html_name}}" id="textarea-{{field.content.html_name}}" cols="30" rows="10">{{field.content.value}}</textarea>
+                        <span contenteditable="true" id="{{field.content.html_name}}" onblur="updateContent(this.id,this)">{{field.content.value|safe}}</span>
+                        {% with 'deleteanswer' as deleteanswer %}
+                        <i class="fas fa-trash" onclick="location.href='{% url deleteanswer form.id questions.id field.instance.id %}'"></i>
+                        {% endwith %}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+            <br>
+            {% with 'addanswer' as addanswer %}
+            <button type="button" class="form-question-button" style="width: auto;" onclick="location.href='{% url addanswer form.id questions.id %}'">+ Add Answer</button>
+            {% endwith %}
+            {% endif %}
+            {% if questions.question_type == 'multiple_choice' %}
+            <div class="form-answer-list">
+                {{ answerforms.management_form }}
+                {% for hidden in answerforms.form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+                {% for field in answerforms %}
+                {{field.id}}
+                <div class="form-answer-card">
+                    <input type="checkbox" name="{{ field.is_correct.html_name }}" id="{{ field.content.id_for_label }}" {% if field.is_correct.value %}checked{% endif %}>
+                    <label for="{{ field.content.id_for_label }}" class="form-answer-content">
+                        <span class="icon"><i class="fas fa-check-square"></i></span>
+                        <textarea name="{{field.content.html_name}}" id="textarea-{{field.content.html_name}}" cols="30" rows="10">{{field.content.value}}</textarea>
+                        <span contenteditable="true" id="{{field.content.html_name}}" onblur="updateContent(this.id,this)">{{field.content.value|safe}}</span>
+                        {% with 'deleteanswer' as deleteanswer %}
+                        <i class="fas fa-trash" onclick="location.href='{% url deleteanswer form.id questions.id field.instance.id %}'"></i>
+                        {% endwith %}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+            <br>
+            {% with 'addanswer' as addanswer %}
+            <button type="button" class="form-question-button" style="width: auto;" onclick="location.href='{% url addanswer form.id questions.id %}'">+ Add Answer</button>
+            {% endwith %}
+            {% endif %}
+            {% if questions.question_type == 'yes_no' %}
+            <div class="form-answer-list">
+                <div class="form-answer-card">
+                    <input type="radio" name="answer" value="True" id="true" {% if 'True' in questions.correct_answer %} checked {% endif %}>
+                    <label for="true" class="form-answer-content">
+                        <span class="icon"><i class="fas fa-dot-circle"></i></span>
+                        Yes
+                    </label>
+                </div>
+                <div class="form-answer-card">
+                    <input type="radio" name="answer" value="False" id="false" {% if 'False' in questions.correct_answer %} checked {% endif %}>
+                    <label for="false" class="form-answer-content">
+                        <span class="icon"><i class="fas fa-dot-circle"></i></span>
+                        No
+                    </label>
+                </div>
+            </div>
+            {% endif %}
+            {% if questions.question_type == 'short_answer' %}
+                <textarea class="form-essay-answer" placeholder="Placeholder text...." name="answer" rows="2">{{questions.placeholder}}</textarea>
+            {% endif %}
+            {% if questions.question_type == 'long_answer' %}
+                <textarea class="form-essay-answer" placeholder="Placeholder text...." name="answer" rows="10">{{questions.placeholder}}</textarea>
+            {% endif %}
+        </div>
+        <div class="form-action-button-container">
+            <button class="form-action-button">Save</button>
+        </div>
+        </form>
+        {% else %}
+        <div class="form-noquestion-selected">
+            {% if allQuestions|length > 0 %}
+                <p>You can edit the questions using the sidebar or by clicking <a href="{% url 'editquestion' form.id allQuestions.0.id %}">here</a>.</p>
+            {% else %}
+                <p>You don't have any questions to edit. You can add questions by selecting the question type you want to add:</p>
+                <form action="{% url 'addquestion' id %}" method="post" style="width: 20%;">
+                    {% csrf_token %}
+                    <button class="form-question-button" name="addquestion" value="single_choice">Single Choice</button>
+                    <button class="form-question-button" name="addquestion" value="multiple_choice">Multiple Choice</button>
+                    <button class="form-question-button" name="addquestion" value="short_answer">Short Answer</button>
+                    <button class="form-question-button" name="addquestion" value="long_answer">Long Answer</button>
+                    <button class="form-question-button" name="addquestion" value="yes_no">Yes/No</button>
+                </form>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+    <div class="form-sidebar-otherforms">
+        <h3 class="form-sidebar-title">Other forms</h3>
+        <ul class="form-form-list">
+            {% for form in allForms %}
+                <li class="form-form-item"><a href="{% url 'editform' form.id %}">{{form.formtitle}}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

@@ -1,14 +1,14 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'quizmain.css' %}">
-<link rel="stylesheet" href="{% static 'quizsettings.css' %}">
-<link rel="stylesheet" href="{% static 'quizreports.css' %}">
-<script src="{% static 'quizscript.js' %}"></script>
+<link rel="stylesheet" href="{% static 'formmain.css' %}">
+<link rel="stylesheet" href="{% static 'formsettings.css' %}">
+<link rel="stylesheet" href="{% static 'formreports.css' %}">
+<script src="{% static 'formscript.js' %}"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-<div class="quiz-navbar">
-    <a class="quiz-navbarbranding" href="{% url 'quizlist' %}">Quizzes</a>
-    <div class="quiz-navbarhomelink"><a href="/" style="font-size: 22px;color: white;">{{ projectName }} >></a></div>
+<div class="form-navbar">
+    <a class="form-navbarbranding" href="{% url 'formlist' %}">Forms</a>
+    <div class="form-navbarhomelink"><a href="/" style="font-size: 22px;color: white;">{{ projectName }} >></a></div>
 </div>
 <div id="message-container" class="message-container">
     <div id="success-message" class="message success-message"></div>

@@ -1,0 +1,39 @@
+{% include 'editformnavigation.html' %}
+{% load static %}
+<div class="form-maincontainer">
+    {% include 'settings/settingsidebar.html' %}
+    <div class="form-mainplayground">
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-settings-container">
+                <h2 class="form-settings-title">General Form Settings</h2>
+                <div id="form-taker-settings" class="form-group">
+                    <div class="form-group-title">Form Taker Information</div>
+                    <div class="form-settings-item">
+                        <label for="nameField">Name</label>
+                        <div class="form-settings-field">
+                            <label for="nameField">Collect Name</label>
+                            {{securitySetting.collect_name}}
+                        </div>
+                    </div>
+                    <div class="form-settings-item">
+                        <label for="emailField">Email</label>
+                        <div class="form-settings-field">
+                            <label for="emailField">Collect Email</label>
+                            {{securitySetting.collect_email}}
+                        </div>
+                    </div>
+                    <div class="form-settings-item">
+                        <label>Information Collection</label>
+                        <div class="form-settings-field">
+                            {{securitySetting.info_collection_placement}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-action-button-container">
+                    <button class="form-action-button">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
